@@ -1,0 +1,17 @@
+# MedGemma and its base model run on our own vLLM servers (deploy/runpod.py starts them);
+# Llama-3.3-70B runs through OpenRouter. gemma3-27b (OpenRouter) was used once, to check
+# that our vLLM server gives the same answers as a hosted Gemma-3.
+medgemma-27b:
+  backend: vllm
+  model_id: google/medgemma-27b-text-it
+  base_url_env: VLLM_URL_MEDGEMMA_27B
+gemma3-27b-vllm:
+  backend: vllm
+  model_id: google/gemma-3-27b-it
+  base_url_env: VLLM_URL_GEMMA3_27B
+gemma3-27b:
+  backend: openrouter
+  model_id: google/gemma-3-27b-it
+llama33-70b:
+  backend: openrouter
+  model_id: meta-llama/llama-3.3-70b-instruct

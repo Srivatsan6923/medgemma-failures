@@ -1,0 +1,12 @@
+run_name: p1o_age85
+probe: med_override
+models: [medgemma-27b, gemma3-27b-vllm]
+n_cases: 120
+temperature: 0.0
+max_tokens: 768
+seed: 1
+concurrency: 32
+probe_params:
+  age: 85
+  conditions: [neutral_continued, trigger_continued]
+notes: Failure A mechanism. The p1o_age45 notes with the header age fixed at 85.

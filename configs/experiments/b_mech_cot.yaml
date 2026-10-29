@@ -1,0 +1,13 @@
+run_name: b_mech_cot
+probe: anchoring
+models: [gemma3-27b-vllm, llama33-70b]
+n_cases: 300
+temperature: 0.0
+max_tokens: 2048
+seed: 0
+concurrency: 64
+probe_params:
+  source: medqa_train
+  cot: true
+  conditions: [baseline, neutral, wrong_anchor]
+notes: Failure B mechanism. Does asking for step-by-step reasoning reduce flips in the two models that answer directly? Development items.

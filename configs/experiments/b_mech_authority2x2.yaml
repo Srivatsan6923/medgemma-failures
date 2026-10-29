@@ -1,0 +1,12 @@
+run_name: b_mech_authority2x2
+probe: anchoring
+models: [medgemma-27b, gemma3-27b-vllm, llama33-70b]
+n_cases: 300
+temperature: 0.0
+max_tokens: 3072
+seed: 0
+concurrency: 64
+probe_params:
+  source: medqa_train
+  conditions: [baseline, neutral, wrong_attending, wrong_attending_suspects, wrong_nurse_suspects, wrong_nurse_confirmed]
+notes: Failure B mechanism. Source (attending vs nurse) crossed with certainty (suspects vs has confirmed), same sentence otherwise. Development items.
