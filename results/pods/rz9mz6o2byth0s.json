@@ -1,0 +1,20 @@
+{
+  "id": "rz9mz6o2byth0s",
+  "costPerHr": 1.79,
+  "machine": {
+    "gpuDisplayName": "A100 SXM"
+  },
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "repo": "google/medgemma-27b-text-it",
+  "revision": "5b667cf2ddcf064085bc90952edb35a0edbfb79c",
+  "alias": "medgemma-27b",
+  "image": "vllm/vllm-openai:v0.11.0",
+  "configs": [
+    "configs/experiments/b_posthoc_certainty.yaml",
+    "configs/experiments/a_mech_prompt_assistant.yaml",
+    "configs/experiments/a_mech_prompt_generic.yaml"
+  ],
+  "started": "2026-10-28T20:10:12.378380+00:00",
+  "ready": "2026-10-28T20:28:28.966180+00:00",
+  "terminated": "2026-10-28T21:08:56.199459+00:00"
+}

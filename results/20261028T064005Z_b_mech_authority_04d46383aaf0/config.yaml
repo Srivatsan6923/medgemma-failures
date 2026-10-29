@@ -1,0 +1,22 @@
+run_name: b_mech_authority
+probe: anchoring
+models:
+- medgemma-27b
+n_cases: 300
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 3072
+seed: 0
+concurrency: 64
+probe_params:
+  source: medqa_train
+  conditions:
+  - baseline
+  - neutral
+  - wrong_anchor
+  - wrong_patient
+  - wrong_nurse
+  - wrong_attending
+  - wrong_ai
+notes: Failure B mechanism. Authority gradient on the P3 dev items; the wrong option
+  is the same across sources.

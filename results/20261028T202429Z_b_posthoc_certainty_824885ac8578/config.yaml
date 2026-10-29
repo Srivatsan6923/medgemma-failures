@@ -1,0 +1,25 @@
+run_name: b_posthoc_certainty
+probe: anchoring
+models:
+- gemma3-27b-vllm
+n_cases: 400
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 3072
+seed: 2
+concurrency: 64
+probe_params:
+  source: medqa_train
+  exclude_ids_file: configs/splits/p3_dev_item_ids.txt
+  conditions:
+  - baseline
+  - neutral
+  - wrong_anchor
+  - wrong_bare
+  - wrong_attending
+  - wrong_attending_suspects
+  - wrong_nurse_confirmed
+  - wrong_nurse_suspects
+notes: Post-hoc, not pre-registered. Replicates the source x certainty result on the
+  400 confirmation items (same planted option per item) and adds an unsourced assertion
+  as a control.

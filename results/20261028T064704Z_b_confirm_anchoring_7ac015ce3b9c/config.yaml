@@ -1,0 +1,15 @@
+run_name: b_confirm_anchoring
+probe: anchoring
+models:
+- gemma3-27b-vllm
+n_cases: 400
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 3072
+seed: 2
+concurrency: 64
+probe_params:
+  source: medqa_train
+  exclude_ids_file: configs/splits/p3_dev_item_ids.txt
+notes: Failure B confirmation (pre-registered in docs/prereg/failure_b_anchoring.md).
+  MedQA diagnosis items disjoint from P3 dev.

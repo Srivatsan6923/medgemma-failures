@@ -1,0 +1,14 @@
+run_name: a_confirm_override
+probe: med_override
+models:
+- gemma3-27b-vllm
+n_cases: 300
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 768
+seed: 2
+concurrency: 64
+probe_params:
+  exclude_ids_file: configs/splits/p1_dev_patient_ids.txt
+notes: Failure A confirmation (pre-registered in docs/prereg/failure_a_override.md).
+  Fresh notes disjoint from all P1 dev runs.

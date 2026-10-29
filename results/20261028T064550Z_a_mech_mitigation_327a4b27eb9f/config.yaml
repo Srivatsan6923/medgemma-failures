@@ -1,0 +1,17 @@
+run_name: a_mech_mitigation
+probe: med_override
+models:
+- gemma3-27b-vllm
+n_cases: 120
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 768
+seed: 0
+concurrency: 64
+probe_params:
+  mitigation: true
+  conditions:
+  - neutral_continued
+  - trigger_continued
+notes: Failure A mitigation. Same dev notes; system prompt asks to reproduce the documented
+  plan and flag concerns.

@@ -1,0 +1,6 @@
+{
+  "medqa_train_dx": 724,
+  "medqa_test_dx": 94,
+  "dev_a_patients": 280,
+  "dev_b_items": 300
+}

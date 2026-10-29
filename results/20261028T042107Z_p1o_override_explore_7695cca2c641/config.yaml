@@ -1,0 +1,18 @@
+run_name: p1o_override_explore
+probe: med_override
+models:
+- medgemma-27b
+n_cases: 120
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 768
+seed: 0
+concurrency: 32
+probe_params:
+  n_scan: 5000
+  min_words: 80
+  insert_frac_range:
+  - 0.3
+  - 0.7
+notes: Controlled override probe (dev, seed 0). Context (neutral vs resolved trigger)
+  x documentation (silent / continued / continue at discharge). Exploratory.

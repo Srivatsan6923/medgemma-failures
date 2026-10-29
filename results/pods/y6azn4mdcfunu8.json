@@ -1,0 +1,22 @@
+{
+  "id": "y6azn4mdcfunu8",
+  "costPerHr": 3.19,
+  "machine": {
+    "gpuDisplayName": "H100 NVL"
+  },
+  "gpu": "NVIDIA H100 NVL",
+  "repo": "google/medgemma-27b-text-it",
+  "revision": "5b667cf2ddcf064085bc90952edb35a0edbfb79c",
+  "alias": "medgemma-27b",
+  "image": "vllm/vllm-openai:v0.11.0",
+  "configs": [
+    "configs\\experiments\\a_confirm_override.yaml",
+    "configs\\experiments\\a_mech_noflags.yaml",
+    "configs\\experiments\\a_mech_mitigation.yaml",
+    "configs\\experiments\\b_confirm_anchoring.yaml",
+    "configs\\experiments\\b_mech_authority.yaml"
+  ],
+  "started": "2026-10-28T06:08:20.116397+00:00",
+  "ready": "2026-10-28T06:16:54.113949+00:00",
+  "terminated": "2026-10-28T06:53:55.681772+00:00"
+}

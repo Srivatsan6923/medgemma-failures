@@ -1,0 +1,17 @@
+run_name: p1o_age85
+probe: med_override
+models:
+- medgemma-27b
+n_cases: 120
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 768
+seed: 1
+concurrency: 32
+probe_params:
+  age: 85
+  conditions:
+  - neutral_continued
+  - trigger_continued
+notes: Mechanism test for the override failure. Same notes at age 45 vs 85; only age
+  differs.

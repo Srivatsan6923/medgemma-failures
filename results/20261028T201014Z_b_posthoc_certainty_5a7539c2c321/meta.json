@@ -1,0 +1,19 @@
+{
+  "git": "964a5cc7efb556e1ea0dc448e96b44b6f3fc043f-dirty",
+  "config_hash": "5a7539c2c321",
+  "cases_sha256": "54ecd31ad6991a6663d9b4ec6b5c94da7ba93fa4b95b16c4ec963a483d56182b",
+  "results_sha256": "3e67939ecaadff92b8a70c19c2132c8f0279ec979eedca45e0e430612e474e42",
+  "n_cases": 3200,
+  "n_rows": 3200,
+  "models": {
+    "llama33-70b": {
+      "alias": "llama33-70b",
+      "backend": "openrouter",
+      "model_id": "meta-llama/llama-3.3-70b-instruct",
+      "provider": null,
+      "base_url_env": "VLLM_BASE_URL"
+    }
+  },
+  "started": "2026-10-28T20:10:14.983282+00:00",
+  "finished": "2026-10-28T20:11:37.237565+00:00"
+}

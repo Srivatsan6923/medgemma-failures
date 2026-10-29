@@ -1,0 +1,19 @@
+{
+  "git": "5bfd4315d85148d3a6e82547a7ae92d13a79861e-dirty",
+  "config_hash": "43e58a056286",
+  "cases_sha256": "c923b9d59fc148e5d132e7ba97fbb092d7d0fbdc6e002789eb7f383e15008a06",
+  "results_sha256": "44af5e03fcff2e0764f39a7232a7976cc88fc3b0541404b733585c48e17cb011",
+  "n_cases": 300,
+  "n_rows": 300,
+  "models": {
+    "gemma3-27b-vllm": {
+      "alias": "gemma3-27b-vllm",
+      "backend": "vllm",
+      "model_id": "google/gemma-3-27b-it",
+      "provider": null,
+      "base_url_env": "VLLM_URL_GEMMA3_27B"
+    }
+  },
+  "started": "2026-10-28T03:54:19.398447+00:00",
+  "finished": "2026-10-28T03:54:59.625692+00:00"
+}

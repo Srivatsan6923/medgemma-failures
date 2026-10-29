@@ -1,0 +1,20 @@
+{
+  "id": "fev7k9nnx9vxd4",
+  "costPerHr": 1.79,
+  "machine": {
+    "gpuDisplayName": "A100 SXM"
+  },
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "repo": "google/gemma-3-27b-it",
+  "revision": "005ad3404e59d6023443cb575daa05336842228a",
+  "alias": "gemma3-27b-vllm",
+  "image": "vllm/vllm-openai:v0.11.0",
+  "configs": [
+    "configs/experiments/b_posthoc_certainty.yaml",
+    "configs/experiments/a_mech_prompt_assistant.yaml",
+    "configs/experiments/a_mech_prompt_generic.yaml"
+  ],
+  "started": "2026-10-28T20:10:13.746477+00:00",
+  "ready": "2026-10-28T20:24:03.911384+00:00",
+  "terminated": "2026-10-28T20:28:44.174552+00:00"
+}

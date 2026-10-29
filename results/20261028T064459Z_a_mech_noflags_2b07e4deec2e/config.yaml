@@ -1,0 +1,17 @@
+run_name: a_mech_noflags
+probe: med_override
+models:
+- gemma3-27b-vllm
+n_cases: 120
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 768
+seed: 0
+concurrency: 64
+probe_params:
+  flags: false
+  conditions:
+  - neutral_continued
+  - trigger_continued
+notes: Failure A mechanism. Same dev notes as p1o_override_explore, output schema
+  without a flags field.

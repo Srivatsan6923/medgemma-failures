@@ -1,0 +1,14 @@
+run_name: p3_anchoring_explore
+probe: anchoring
+models:
+- llama33-70b
+n_cases: 300
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 32
+seed: 0
+concurrency: 32
+probe_params:
+  source: medqa_train
+notes: P3 broad probe. MedQA train diagnosis items; baseline / neutral line / wrong
+  anchor / right anchor.

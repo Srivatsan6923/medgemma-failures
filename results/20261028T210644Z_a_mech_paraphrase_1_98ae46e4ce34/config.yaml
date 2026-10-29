@@ -1,0 +1,18 @@
+run_name: a_mech_paraphrase_1
+probe: med_override
+models:
+- medgemma-27b
+n_cases: 120
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 768
+seed: 0
+concurrency: 64
+probe_params:
+  system: You are a hospital pharmacist who carefully reconciles patients' medications
+    at discharge.
+  conditions:
+  - neutral_continued
+  - trigger_continued
+notes: Post-hoc prompt paraphrase 1 for Failure A. Same dev notes; the system prompt
+  is reworded with the same meaning.

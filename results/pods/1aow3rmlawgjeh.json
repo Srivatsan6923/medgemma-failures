@@ -1,0 +1,18 @@
+{
+  "id": "1aow3rmlawgjeh",
+  "costPerHr": 3.19,
+  "machine": {
+    "gpuDisplayName": "H100 NVL"
+  },
+  "gpu": "NVIDIA H100 NVL",
+  "repo": "google/gemma-3-27b-it",
+  "revision": "005ad3404e59d6023443cb575daa05336842228a",
+  "alias": "gemma3-27b-vllm",
+  "image": "vllm/vllm-openai:v0.11.0",
+  "configs": [
+    "configs\\experiments\\b_mech_authority2x2.yaml"
+  ],
+  "started": "2026-10-28T07:54:58.930218+00:00",
+  "ready": "2026-10-28T08:03:36.571238+00:00",
+  "terminated": "2026-10-28T08:04:42.194845+00:00"
+}

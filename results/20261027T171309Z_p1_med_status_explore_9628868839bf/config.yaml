@@ -1,0 +1,20 @@
+run_name: p1_med_status_explore
+probe: med_status
+models:
+- gemma3-27b
+- llama33-70b
+n_cases: 50
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 512
+seed: 0
+concurrency: 8
+probe_params:
+  n_scan: 5000
+  min_words: 80
+  n_distractors: 5
+  insert_frac_range:
+  - 0.3
+  - 0.7
+notes: Day-1 broad probe for P1 (dev set, seed 0). Exploratory; not a confirmatory
+  result.

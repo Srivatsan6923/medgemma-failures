@@ -1,0 +1,18 @@
+run_name: p1_med_status_explore_medgemma
+probe: med_status
+models:
+- medgemma-27b
+n_cases: 50
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 512
+seed: 0
+concurrency: 32
+probe_params:
+  n_scan: 5000
+  min_words: 80
+  n_distractors: 5
+  insert_frac_range:
+  - 0.3
+  - 0.7
+notes: P1 explore on MedGemma-27B (self-hosted vLLM); same cases as p1_med_status_explore.

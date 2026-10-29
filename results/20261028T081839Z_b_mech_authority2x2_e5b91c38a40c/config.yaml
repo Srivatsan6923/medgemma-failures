@@ -1,0 +1,21 @@
+run_name: b_mech_authority2x2
+probe: anchoring
+models:
+- medgemma-27b
+n_cases: 300
+samples_per_case: 1
+temperature: 0.0
+max_tokens: 3072
+seed: 0
+concurrency: 64
+probe_params:
+  source: medqa_train
+  conditions:
+  - baseline
+  - neutral
+  - wrong_attending
+  - wrong_attending_suspects
+  - wrong_nurse_suspects
+  - wrong_nurse_confirmed
+notes: B-M1b. Source (attending physician vs nurse) x certainty (suspects vs has confirmed),
+  same template; separates authority from certainty wording.
