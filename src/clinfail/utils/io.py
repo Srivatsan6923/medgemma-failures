@@ -35,11 +35,18 @@ def write_jsonl(path: Path, rows: Iterable[dict[str, Any]]) -> str:
 def cached_jsonl(
     path: Path, build: Callable[[], Iterable[dict[str, Any]]]
 ) -> tuple[list[dict[str, Any]], str]:
-    """Load rows from a JSONL cache, building it first if it doesn't exist yet."""
+    """Load rows from a JSONL cache, building it first if it doesn't exist yet.
+
+    The sha256 of the file is stored with every case. The runs were made on Windows, so
+    the cache is always written with CRLF line endings to give the same file, and the
+    same hash, on every OS.
+    """
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(
-            "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in build()), encoding="utf-8"
+            "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in build()),
+            encoding="utf-8",
+            newline="\r\n",
         )
     raw = path.read_bytes()
     rows = [json.loads(line) for line in raw.decode("utf-8").splitlines() if line.strip()]

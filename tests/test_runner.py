@@ -19,6 +19,6 @@ def test_run_writes_a_complete_run_directory(mcq_dir, fake_backend, monkeypatch)
     assert (summary["error"] == 0).all()
     assert json.loads((run_dir / "meta.json").read_text())["n_rows"] == 5 * 4
 
-    # a second run replays every reply from the cache
-    run_experiment(cfg, models, mcq_dir / "runs", mcq_dir / "cache")
+    # a second run (own output folder, same cache) replays every reply from the cache
+    run_experiment(cfg, models, mcq_dir / "runs2", mcq_dir / "cache")
     assert len(fake_backend) == 5 * 4
