@@ -6,5 +6,5 @@ __pycache__/
 .ruff_cache/
 
 # downloaded datasets and fresh runs
-data/
-outputs/
+/data/
+/outputs/
