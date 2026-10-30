@@ -1,6 +1,6 @@
 import pytest
 
-from clinfail.eval.metrics import discordant_or, holm, mcnemar_exact, paired_diff_ci, wilson_ci
+from clinfail.eval.metrics import holm, mcnemar_exact, paired_diff_ci, wilson_ci
 
 
 def test_wilson():
@@ -27,11 +27,3 @@ def test_paired_diff_ci():
     assert d == pytest.approx(61 / 300)
     assert lo < d < hi
     assert paired_diff_ci(5, 5, 100)[0] == 0
-
-
-def test_discordant_or():
-    est, lo, hi = discordant_or(62, 1)
-    assert est == 62
-    assert 1 < lo < 62 < hi
-    assert discordant_or(5, 0)[0] == float("inf")
-    assert discordant_or(0, 5)[1] == 0

@@ -118,9 +118,10 @@ STEPS = [
     ),
     (
         "b_dev",
-        "Failure B, development run (the MedGemma row is a discarded run whose replies were "
-        "cut off at 32 tokens; see the next table)",
-        analyze.anchoring,
+        "Failure B, development run, Gemma-3 and Llama",
+        # this run also holds a discarded MedGemma attempt whose replies were cut off at
+        # 32 tokens; MedGemma's development run is b_dev_medgemma
+        lambda run: analyze.anchoring(run, models=("gemma3-27b-vllm", "llama33-70b")),
         "p3_anchoring_explore",
     ),
     (

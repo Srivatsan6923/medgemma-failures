@@ -127,7 +127,7 @@ src/clinfail/
   probes/           notes.py (discharge-summary template), med_override.py (Failure A),
                     anchoring.py (Failure B), med_status.py (stopped-drug probe)
   models/llm.py     OpenAI-compatible client with the reply cache
-  eval/metrics.py   Wilson interval, exact McNemar test, paired difference, odds ratio, Holm
+  eval/metrics.py   Wilson interval, exact McNemar test, paired difference, Holm
   runner.py, cli.py run a config and write the run directory
 scripts/            reproduce.py, analyze.py, figures.py, bundle.py, prevalence.py, get_data.py
 deploy/runpod.py    vLLM server on RunPod

@@ -16,7 +16,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from clinfail.eval.metrics import discordant_or, holm, mcnemar_exact, paired_diff_ci, wilson_ci
+from clinfail.eval.metrics import holm, mcnemar_exact, paired_diff_ci, wilson_ci
 
 load_dotenv()
 # where run directories live: results/ for the bundled runs, outputs/runs for fresh ones
@@ -62,11 +62,6 @@ def rate(k: int, n: int) -> str:
     return f"{k}/{n} ({k / n:.1%}) [{lo:.1%}, {hi:.1%}]"
 
 
-def odds_ratio(b: int, c: int) -> str:
-    est, lo, hi = discordant_or(b, c)
-    return f"{est:.1f} [{lo:.1f}, {hi:.1f}]"
-
-
 def discordant(x: list[bool], y: list[bool]) -> tuple[int, int]:
     """Pairs where only x failed, and pairs where only y failed."""
     b = sum(p and not q for p, q in zip(x, y, strict=True))
@@ -94,8 +89,8 @@ def override(run_name: str, primary=("trigger_continued", "neutral_continued")) 
     mg, g = rows[MG], rows[G]
     conds = sorted({r["condition"] for r in mg.values()})
     print(
-        "| condition | MedGemma | Gemma-3 | MG only | G only | diff [95% CI] | OR [95% CI] | p "
-        "| silent MG | silent G |\n|---|---|---|---|---|---|---|---|---|---|"
+        "| condition | MedGemma | Gemma-3 | MG only | G only | diff [95% CI] | p "
+        "| silent MG | silent G |\n|---|---|---|---|---|---|---|---|---|"
     )
     pvals = {}
     for c in conds:
@@ -113,7 +108,7 @@ def override(run_name: str, primary=("trigger_continued", "neutral_continued")) 
         print(
             f"| {c} | {rate(sum(mg[i]['failed'] for i in ids), len(ids))} "
             f"| {rate(sum(g[i]['failed'] for i in ids), len(ids))} | {b} | {cc} "
-            f"| {d:+.1%} [{lo:+.1%}, {hi:+.1%}] | {odds_ratio(b, cc)} | {pvals[c]:.2g} "
+            f"| {d:+.1%} [{lo:+.1%}, {hi:+.1%}] | {pvals[c]:.2g} "
             f"| {sm} | {sg} |"
         )
     hits = [c for c in primary if c in pvals]
@@ -275,17 +270,15 @@ ACK_RESOLVED = re.compile(
 def read_and_override(run_name: str) -> None:
     """Does the flag on a dropped drug show that MedGemma read the plan it went against?"""
     mg = load(run_name)[MG]
+    print(
+        "| condition | MedGemma drops | flag names the drug | flag says it was continued "
+        "| flag says the abnormality resolved |\n|---|---|---|---|---|"
+    )
     for c in ("trigger_continued", "neutral_continued"):
         flags = [flags_on_target(r) for r in mg.values() if r["condition"] == c and r["failed"]]
         cont = sum(bool(ACK_CONTINUED.search(f)) for f in flags)
         res = sum(bool(ACK_RESOLVED.search(f)) for f in flags)
-        either = sum(bool(ACK_CONTINUED.search(f) or ACK_RESOLVED.search(f)) for f in flags)
-        print(
-            f"{c}: MedGemma drops {len(flags)}, flag on the drug says it was continued {cont}, "
-            f"says the abnormality resolved {res}, either {either}, "
-            f"flag on the drug {sum(bool(f) for f in flags)}, no flag on the drug "
-            f"{sum(not f for f in flags)}"
-        )
+        print(f"| {c} | {len(flags)} | {sum(bool(f) for f in flags)} | {cont} | {res} |")
 
 
 A_RUNS = [
@@ -329,15 +322,15 @@ def p1_leakage(run_name: str) -> None:
 # ---------------------------------------------------------------- Failure B
 
 
-def anchoring(run_name: str, anchors=("wrong_anchor",)) -> None:
+def anchoring(run_name: str, anchors=("wrong_anchor",), models=MODELS) -> None:
     """Flip rate of each inserted line against the neutral line, on baseline-correct items."""
     rows = load(run_name)
     pvals = []
     print(
         "| model | baseline acc | kept | condition | flips | onto anchor | vs neutral "
-        "| OR [95% CI] | p | unparseable |\n|---|---|---|---|---|---|---|---|---|---|"
+        "| p | unparseable |\n|---|---|---|---|---|---|---|---|---|"
     )
-    for m in [m for m in MODELS if m in rows]:
+    for m in [m for m in models if m in rows]:
         r = rows[m]
         items, keep = baseline_correct(r)
         acc = len(keep) / len(items)
@@ -356,11 +349,14 @@ def anchoring(run_name: str, anchors=("wrong_anchor",)) -> None:
             p = mcnemar_exact(b, cc)
             if c in anchors:
                 pvals.append((m, c, p))
+            # the neutral line is the reference, so comparing it with itself is left blank
+            vs = "" if c == "neutral" else f"{b} vs {cc}"
+            pv = "" if c == "neutral" else f"{p:.2g}"
             # unparseable replies are already counted in flips; this column says how many
             unparsed = sum(not r[f"{i}-{c}"]["parse_ok"] for i in keep)
             print(
                 f"| {m} | {acc:.3f} | {len(keep)}/{len(items)} | {c} | {rate(sum(flips), len(keep))} "
-                f"| {onto} | {b} vs {cc} | {odds_ratio(b, cc)} | {p:.2g} | {unparsed} |"
+                f"| {onto} | {vs} | {pv} | {unparsed} |"
             )
     for (m, c, _), p in zip(pvals, holm([p for *_, p in pvals]), strict=True):
         print(f"Holm-adjusted p ({m}, {c}): {p:.2g}")

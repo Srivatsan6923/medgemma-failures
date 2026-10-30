@@ -36,21 +36,6 @@ def paired_diff_ci(b: int, c: int, n: int, alpha: float = 0.05) -> tuple[float, 
     return d, d - z * se, d + z * se
 
 
-def discordant_or(b: int, c: int, alpha: float = 0.05) -> tuple[float, float, float]:
-    """Paired odds ratio b / c with an exact interval.
-
-    Conditional on b + c, b is binomial, so a Clopper-Pearson interval for
-    b / (b + c) maps to an interval for the odds b / c.
-    """
-
-    def odds(p: float) -> float:
-        return p / (1 - p) if p < 1 else math.inf
-
-    lo = stats.beta.ppf(alpha / 2, b, c + 1) if b else 0.0
-    hi = stats.beta.ppf(1 - alpha / 2, b + 1, c) if c else 1.0
-    return (b / c if c else math.inf), odds(lo), odds(hi)
-
-
 def holm(pvalues: list[float]) -> list[float]:
     """Holm step-down adjustment, returned in the input order."""
     order = sorted(range(len(pvalues)), key=lambda i: pvalues[i])
