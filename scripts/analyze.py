@@ -157,7 +157,7 @@ def override_audit(run_name: str) -> None:
             k for k, r in mg.items() if r["condition"] == c and r["failed"] and not g[k]["failed"]
         ]
         reasons = Counter(flag_reason(mg[k]) for k in only)
-        print(f"{c}: MedGemma-only overrides {len(only)}: {dict(reasons.most_common())}")
+        print(f"{c}: MedGemma-only drops {len(only)}: {dict(reasons.most_common())}")
         ids = [
             k
             for k, r in mg.items()
@@ -273,7 +273,7 @@ ACK_RESOLVED = re.compile(
 
 
 def read_and_override(run_name: str) -> None:
-    """Does the flag on a dropped drug show that MedGemma read the plan it overrode?"""
+    """Does the flag on a dropped drug show that MedGemma read the plan it went against?"""
     mg = load(run_name)[MG]
     for c in ("trigger_continued", "neutral_continued"):
         flags = [flags_on_target(r) for r in mg.values() if r["condition"] == c and r["failed"]]
@@ -281,7 +281,7 @@ def read_and_override(run_name: str) -> None:
         res = sum(bool(ACK_RESOLVED.search(f)) for f in flags)
         either = sum(bool(ACK_CONTINUED.search(f) or ACK_RESOLVED.search(f)) for f in flags)
         print(
-            f"{c}: MedGemma overrides {len(flags)}, flag on the drug says it was continued {cont}, "
+            f"{c}: MedGemma drops {len(flags)}, flag on the drug says it was continued {cont}, "
             f"says the abnormality resolved {res}, either {either}, "
             f"flag on the drug {sum(bool(f) for f in flags)}, no flag on the drug "
             f"{sum(not f for f in flags)}"
