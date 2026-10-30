@@ -1,4 +1,4 @@
-# Two clinical failure modes of MedGemma-27B
+# Evaluating MedGemma-27B on medication reconciliation and diagnosis
 
 Code and data for a study of two ways MedGemma-27B fails on clinical tasks. Each test
 shows a model the same note or exam question twice, with one sentence changed, and compares
