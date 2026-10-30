@@ -18,6 +18,11 @@ NAMES = {
     "gemma3-27b-vllm": "Gemma-3-27B (base)",
     "llama33-70b": "Llama-3.3-70B",
 }
+SHORT = {
+    "medgemma-27b": "MedGemma",
+    "gemma3-27b-vllm": "Gemma-3 (base)",
+    "llama33-70b": "Llama-3.3",
+}
 WIDTH = 7.1  # inches, the text width of the write-up
 
 
@@ -150,40 +155,47 @@ def figure_a() -> None:
 def figure_b() -> None:
     """Flip rate for the same wrong option stated by different sources and with
     different certainty, on the confirmation items."""
-    style()
+    style(8.5)
     rows = load("b_posthoc_certainty")
     lines = [
         ("neutral", "neutral line"),
-        ("wrong_anchor", "referring note: working diagnosis X*"),
-        ("wrong_nurse_suspects", 'nurse "suspects" X'),
-        ("wrong_attending_suspects", 'attending "suspects" X'),
-        ("wrong_nurse_confirmed", 'nurse "has confirmed" X'),
-        ("wrong_attending", 'attending "has confirmed" X'),
-        ("wrong_bare", 'no source: "The diagnosis is X."'),
+        ("wrong_anchor", "referral note *"),
+        ("wrong_nurse_suspects", "nurse suspects"),
+        ("wrong_attending_suspects", "attending suspects"),
+        ("wrong_nurse_confirmed", "nurse has confirmed"),
+        ("wrong_attending", "attending has confirmed"),
+        ("wrong_bare", "no source"),
     ][::-1]
-    fig, ax = plt.subplots(figsize=(WIDTH, 2.35))
-    models = [(0.22, "medgemma-27b"), (0.0, "gemma3-27b-vllm"), (-0.22, "llama33-70b")]
+    # sized to sit beside the example in the write-up
+    fig, ax = plt.subplots(figsize=(3.5, 2.6))
+    for y in range(0, len(lines), 2):
+        ax.axhspan(y - 0.5, y + 0.5, color="#F2F4F7", lw=0, zorder=0)
+    models = [(0.26, "medgemma-27b"), (0.0, "gemma3-27b-vllm"), (-0.26, "llama33-70b")]
     for y, (c, _) in enumerate(lines):
         for off, m in models:
             est = flips(rows[m], c)
-            dot(ax, y + off, est, m, NAMES[m] if y == 0 else None, ms=4.5)
-            if m == "medgemma-27b" and c in ("wrong_anchor", "wrong_attending", "wrong_bare"):
-                tag(ax, est, y + off, left=True)
+            dot(ax, y + off, est, m, SHORT[m] if y == 0 else None, ms=4)
+            if m == "medgemma-27b":
+                tag(ax, est, y + off)
     ax.set_yticks(range(len(lines)), [label for _, label in lines])
+    ax.tick_params(axis="y", length=0)
+    ax.xaxis.grid(True, color="#E3E6EA", lw=0.6)
+    ax.set_axisbelow(True)
     ax.set_xlim(0, 50)
-    ax.set_ylim(-0.6, len(lines) - 0.4)
-    ax.set_xlabel("Correct diagnoses flipped by one inserted line (%)")
+    ax.set_ylim(-0.5, len(lines) - 0.5)
+    ax.set_xlabel("Correct diagnoses flipped (%)")
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(
+    # centred on the whole figure, since the long row labels push the axes right
+    fig.legend(
         handles,
         labels,
         frameon=False,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 1.0),
+        loc="upper center",
         ncol=3,
-        handletextpad=0.3,
+        handletextpad=0.2,
+        columnspacing=1.0,
     )
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.92))
     save(fig, "fig_b_deference")
     plt.close(fig)
 
