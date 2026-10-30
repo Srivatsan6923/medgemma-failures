@@ -1,43 +1,43 @@
 ## Run index
-| run | model | served by | model revision |
-|---|---|---|---|
-| a_confirm_override | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| a_confirm_override | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| a_mech_mitigation | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| a_mech_mitigation | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| a_mech_noflags | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| a_mech_noflags | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| a_mech_paraphrase_1 | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| a_mech_paraphrase_1 | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| a_mech_paraphrase_2 | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| a_mech_paraphrase_2 | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| b_confirm_anchoring | llama33-70b | OpenRouter | provider default |
-| b_confirm_anchoring | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| b_confirm_anchoring | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| b_mech_authority2x2 | llama33-70b | OpenRouter | provider default |
-| b_mech_authority2x2 | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| b_mech_authority2x2 | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| b_mech_authority | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| b_mech_authority | llama33-70b | OpenRouter | provider default |
-| b_mech_authority | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| b_mech_cot | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| b_mech_cot | llama33-70b | OpenRouter | provider default |
-| b_posthoc_certainty | llama33-70b | OpenRouter | provider default |
-| b_posthoc_certainty | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| b_posthoc_certainty | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| p1_med_status_explore | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| p1_med_status_explore | gemma3-27b | OpenRouter | provider default |
-| p1_med_status_explore | llama33-70b | OpenRouter | provider default |
-| p1_med_status_explore_medgemma | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| p1o_age45 | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| p1o_age45 | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| p1o_age85 | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| p1o_age85 | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| p1o_override_explore | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| p1o_override_explore | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| p1o_override_explore | llama33-70b | OpenRouter | provider default |
-| p3_anchoring_explore | gemma3-27b-vllm | vLLM v0.11.0 | 005ad340 |
-| p3_anchoring_explore | llama33-70b | OpenRouter | provider default |
-| p3_anchoring_explore | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
-| p3_anchoring_explore | llama33-70b | OpenRouter | provider default |
-| p3_anchoring_explore_medgemma | medgemma-27b | vLLM v0.11.0 | 5b667cf2 |
+| run | model | served by |
+|---|---|---|
+| a_confirm_override | gemma3-27b-vllm | vLLM |
+| a_confirm_override | medgemma-27b | vLLM |
+| a_mech_mitigation | gemma3-27b-vllm | vLLM |
+| a_mech_mitigation | medgemma-27b | vLLM |
+| a_mech_noflags | gemma3-27b-vllm | vLLM |
+| a_mech_noflags | medgemma-27b | vLLM |
+| a_mech_paraphrase_1 | gemma3-27b-vllm | vLLM |
+| a_mech_paraphrase_1 | medgemma-27b | vLLM |
+| a_mech_paraphrase_2 | medgemma-27b | vLLM |
+| a_mech_paraphrase_2 | gemma3-27b-vllm | vLLM |
+| b_confirm_anchoring | llama33-70b | OpenRouter |
+| b_confirm_anchoring | gemma3-27b-vllm | vLLM |
+| b_confirm_anchoring | medgemma-27b | vLLM |
+| b_mech_authority2x2 | llama33-70b | OpenRouter |
+| b_mech_authority2x2 | gemma3-27b-vllm | vLLM |
+| b_mech_authority2x2 | medgemma-27b | vLLM |
+| b_mech_authority | medgemma-27b | vLLM |
+| b_mech_authority | llama33-70b | OpenRouter |
+| b_mech_authority | gemma3-27b-vllm | vLLM |
+| b_mech_cot | gemma3-27b-vllm | vLLM |
+| b_mech_cot | llama33-70b | OpenRouter |
+| b_posthoc_certainty | llama33-70b | OpenRouter |
+| b_posthoc_certainty | gemma3-27b-vllm | vLLM |
+| b_posthoc_certainty | medgemma-27b | vLLM |
+| p1_med_status_explore | gemma3-27b-vllm | vLLM |
+| p1_med_status_explore | gemma3-27b | OpenRouter |
+| p1_med_status_explore | llama33-70b | OpenRouter |
+| p1_med_status_explore_medgemma | medgemma-27b | vLLM |
+| p1o_age45 | medgemma-27b | vLLM |
+| p1o_age45 | gemma3-27b-vllm | vLLM |
+| p1o_age85 | gemma3-27b-vllm | vLLM |
+| p1o_age85 | medgemma-27b | vLLM |
+| p1o_override_explore | gemma3-27b-vllm | vLLM |
+| p1o_override_explore | medgemma-27b | vLLM |
+| p1o_override_explore | llama33-70b | OpenRouter |
+| p3_anchoring_explore | gemma3-27b-vllm | vLLM |
+| p3_anchoring_explore | llama33-70b | OpenRouter |
+| p3_anchoring_explore | medgemma-27b | vLLM |
+| p3_anchoring_explore | llama33-70b | OpenRouter |
+| p3_anchoring_explore_medgemma | medgemma-27b | vLLM |

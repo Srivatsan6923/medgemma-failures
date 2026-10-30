@@ -501,7 +501,7 @@ def prevalence(_: str = "") -> None:
     """How often the two triggers occur in MTSamples (counts from scripts/prevalence.py)."""
     p = json.loads((RUNS / "prevalence.json").read_text(encoding="utf-8"))
     dc, notes = p["discharge_summaries"], p["notes"]
-    print(f"MTSamples revision {p['revision']}: {notes} notes, {dc} discharge summaries")
+    print(f"MTSamples: {notes} notes, {dc} discharge summaries")
     print(f"A, a medication described as continued: {rate(p['continued'], dc)}")
     print(
         "A, ... without a discharge-medication section: "
@@ -528,19 +528,14 @@ def data_counts(_: str = "") -> None:
 
 
 def run_index(_: str = "") -> None:
-    """Every bundled run with its model, where it was served and the model revision."""
-    pods = [json.loads(p.read_text(encoding="utf-8")) for p in (RUNS / "pods").glob("*.json")]
-    print("| run | model | served by | model revision |\n|---|---|---|---|")
+    """Every bundled run with its model and where it was served."""
+    print("| run | model | served by |\n|---|---|---|")
     for d in sorted(p for p in RUNS.iterdir() if (p / "meta.json").exists()):
         meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
         name = d.name.rsplit("_", 1)[0]
         for alias, spec in meta["models"].items():
-            if spec["backend"] == "openrouter":
-                served, revision = "OpenRouter", "provider default"
-            else:
-                served = "vLLM v0.11.0"
-                revision = next(p["revision"][:8] for p in pods if p["alias"] == alias)
-            print(f"| {name} | {alias} | {served} | {revision} |")
+            served = "OpenRouter" if spec["backend"] == "openrouter" else "vLLM"
+            print(f"| {name} | {alias} | {served} |")
 
 
 if __name__ == "__main__":
