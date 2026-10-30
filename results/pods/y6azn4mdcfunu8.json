@@ -16,7 +16,5 @@
     "configs\\experiments\\b_confirm_anchoring.yaml",
     "configs\\experiments\\b_mech_authority.yaml"
   ],
-  "started": "2026-10-28T06:08:20.116397+00:00",
-  "ready": "2026-10-28T06:16:54.113949+00:00",
-  "terminated": "2026-10-28T06:53:55.681772+00:00"
+  "ready": true
 }

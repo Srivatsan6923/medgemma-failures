@@ -38,15 +38,15 @@ def read_results(d: Path) -> list[dict] | None:
 
 
 def run_dirs(run_name: str) -> dict[str, Path]:
-    """The latest run directory for each model that ran this config."""
-    latest = {}
-    for d in sorted(RUNS.glob(f"*_{run_name}_*")):
-        # directory names are <time>_<run name>_<hash>; skip runs whose name only starts the same
-        if d.name.split("_", 1)[1].rsplit("_", 1)[0] != run_name:
+    """The run directory for each model that ran this config."""
+    found = {}
+    for d in sorted(RUNS.glob(f"{run_name}_*")):
+        # directory names are <run name>_<hash>; skip runs whose name only starts the same
+        if d.name.rsplit("_", 1)[0] != run_name:
             continue
         for m in sorted({r["model"] for r in read_results(d) or []}):
-            latest[m] = d
-    return latest
+            found[m] = d
+    return found
 
 
 def load(run_name: str) -> dict[str, dict[str, dict]]:
@@ -484,17 +484,17 @@ def data_counts(_: str = "") -> None:
 def run_index(_: str = "") -> None:
     """Every bundled run with its model, where it was served and the model revision."""
     pods = [json.loads(p.read_text(encoding="utf-8")) for p in (RUNS / "pods").glob("*.json")]
-    print("| run | model | served by | model revision | started (UTC) |\n|---|---|---|---|---|")
+    print("| run | model | served by | model revision |\n|---|---|---|---|")
     for d in sorted(p for p in RUNS.iterdir() if (p / "meta.json").exists()):
         meta = json.loads((d / "meta.json").read_text(encoding="utf-8"))
-        name = d.name.split("_", 1)[1].rsplit("_", 1)[0]
+        name = d.name.rsplit("_", 1)[0]
         for alias, spec in meta["models"].items():
             if spec["backend"] == "openrouter":
                 served, revision = "OpenRouter", "provider default"
             else:
                 served = "vLLM v0.11.0"
                 revision = next(p["revision"][:8] for p in pods if p["alias"] == alias)
-            print(f"| {name} | {alias} | {served} | {revision} | {meta['started'][:16]} |")
+            print(f"| {name} | {alias} | {served} | {revision} |")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,6 @@ import hashlib
 import json
 import subprocess
 from collections.abc import Callable, Iterable
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -17,9 +16,9 @@ def git_hash() -> str:
 
 
 def make_run_dir(root: Path, run_name: str, cfg_hash: str) -> Path:
-    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    path = root / f"{stamp}_{run_name}_{cfg_hash}"
-    path.mkdir(parents=True)
+    # rerunning the same config replays the cache, so it rewrites the same directory
+    path = root / f"{run_name}_{cfg_hash}"
+    path.mkdir(parents=True, exist_ok=True)
     return path
 
 

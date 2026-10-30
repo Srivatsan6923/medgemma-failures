@@ -14,7 +14,5 @@
     "configs/experiments/a_mech_prompt_assistant.yaml",
     "configs/experiments/a_mech_prompt_generic.yaml"
   ],
-  "started": "2026-10-28T20:10:13.746477+00:00",
-  "ready": "2026-10-28T20:24:03.911384+00:00",
-  "terminated": "2026-10-28T20:28:44.174552+00:00"
+  "ready": true
 }

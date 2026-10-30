@@ -40,7 +40,7 @@ OUT = Path("results")
 
 
 def copy_runs() -> None:
-    # one record per RunPod server: model revision, image, start and end times
+    # one record per RunPod server: model revision, image and GPU
     (OUT / "pods").mkdir(parents=True, exist_ok=True)
     for f in (RUNS.parent / "pods").glob("*.json"):
         record = json.loads(f.read_text(encoding="utf-8"))

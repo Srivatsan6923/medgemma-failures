@@ -12,7 +12,5 @@
   "configs": [
     "configs\\experiments\\b_mech_authority2x2.yaml"
   ],
-  "started": "2026-10-28T07:54:58.930218+00:00",
-  "ready": "2026-10-28T08:03:36.571238+00:00",
-  "terminated": "2026-10-28T08:04:42.194845+00:00"
+  "ready": true
 }

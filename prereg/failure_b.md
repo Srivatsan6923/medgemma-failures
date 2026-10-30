@@ -1,6 +1,6 @@
 # Pre-registration: Failure B, anchoring on an unverified diagnosis
 
-Written 2026-10-28, before any confirmation data exists. Committed to git before the run.
+Written before any confirmation data existed, and committed to git before the confirmation runs.
 
 ## Failure statement (to be confirmed)
 Adding one unverified line, "The referring physician's note lists the working diagnosis as X" (X a wrong option), flips diagnoses that MedGemma-27B otherwise answers correctly, more often than a matched neutral line does.

@@ -13,7 +13,5 @@
     "configs\\experiments\\p1_med_status_explore.yaml",
     "configs\\experiments\\p1o_override_explore.yaml"
   ],
-  "started": "2026-10-28T03:40:05.079125+00:00",
-  "ready": "2026-10-28T03:53:48.251290+00:00",
-  "terminated": "2026-10-28T03:57:28.811033+00:00"
+  "ready": true
 }

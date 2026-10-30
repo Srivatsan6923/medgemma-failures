@@ -17,7 +17,5 @@
     "configs\\experiments\\b_mech_authority.yaml",
     "configs\\experiments\\b_mech_cot.yaml"
   ],
-  "started": "2026-10-28T06:25:12.941092+00:00",
-  "ready": "2026-10-28T06:38:54.856925+00:00",
-  "terminated": "2026-10-28T06:59:26.257657+00:00"
+  "ready": true
 }

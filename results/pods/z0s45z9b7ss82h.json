@@ -14,7 +14,5 @@
     "configs\\experiments\\p1o_age45.yaml",
     "configs\\experiments\\p1o_age85.yaml"
   ],
-  "started": "2026-10-28T04:35:04.558712+00:00",
-  "ready": "2026-10-28T04:46:07.612815+00:00",
-  "terminated": "2026-10-28T04:49:31.849870+00:00"
+  "ready": true
 }

@@ -1,6 +1,6 @@
 # Pre-registration: Failure A, documented-plan override
 
-Written 2026-10-28, before any confirmation data exists. Committed to git before the run.
+Written before any confirmation data existed, and committed to git before the confirmation runs.
 
 ## Failure statement (to be confirmed)
 When a discharge summary documents that a home medication "was continued at the home dose throughout the admission" but gives no discharge instruction, MedGemma-27B moves that medication out of the discharge `continue` list more often than its base model Gemma-3-27B.

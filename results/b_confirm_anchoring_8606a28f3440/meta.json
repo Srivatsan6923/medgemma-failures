@@ -1,0 +1,17 @@
+{
+  "git": "cb7ec984559f5791032565fae2802f6556317f28",
+  "config_hash": "8606a28f3440",
+  "cases_sha256": "a5028821e588b0bc4a0136c016c521dea10fcb63bb2b3e4e8ccb3cf835f51e71",
+  "results_sha256": "1d5654976fa51657e7362b74c5e3158c20d49940188e24d4630dae98c3ba10bd",
+  "n_cases": 1600,
+  "n_rows": 1600,
+  "models": {
+    "medgemma-27b": {
+      "alias": "medgemma-27b",
+      "backend": "vllm",
+      "model_id": "google/medgemma-27b-text-it",
+      "provider": null,
+      "base_url_env": "VLLM_URL_MEDGEMMA_27B"
+    }
+  }
+}

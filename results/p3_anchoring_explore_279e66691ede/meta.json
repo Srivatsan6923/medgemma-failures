@@ -1,0 +1,24 @@
+{
+  "git": "a48bda7534ba5df861ae3d2830f53cbe8512fd7a-dirty",
+  "config_hash": "279e66691ede",
+  "cases_sha256": "c0d929fa0c9d4da811d48f0ec57049485ceb83458b1b1be1d86d2f2679daa2be",
+  "results_sha256": "28aa64ce2a22648f43ff90d8ee82f650988f26bcabc9b364bfd9f6f04a866850",
+  "n_cases": 1200,
+  "n_rows": 2400,
+  "models": {
+    "gemma3-27b-vllm": {
+      "alias": "gemma3-27b-vllm",
+      "backend": "vllm",
+      "model_id": "google/gemma-3-27b-it",
+      "provider": null,
+      "base_url_env": "VLLM_URL_GEMMA3_27B"
+    },
+    "llama33-70b": {
+      "alias": "llama33-70b",
+      "backend": "openrouter",
+      "model_id": "meta-llama/llama-3.3-70b-instruct",
+      "provider": null,
+      "base_url_env": "VLLM_BASE_URL"
+    }
+  }
+}

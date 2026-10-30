@@ -1,16 +1,15 @@
 """Run one experiment config and write a self-contained run directory.
 
-<OUTPUT_ROOT>/runs/<utc time>_<run name>_<config hash>/
+<OUTPUT_ROOT>/runs/<run name>_<config hash>/
     config.yaml    the config as run
     cases.jsonl    every prompt, with its gold answer
     results.jsonl  every reply with its scores (one row per model and case)
     summary.csv    failure rate per model and condition
-    meta.json      git commit, hashes of cases and results, model endpoints, timing
+    meta.json      git commit, hashes of cases and results, model endpoints
 """
 
 import json
 from dataclasses import asdict
-from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -32,7 +31,6 @@ def run_experiment(
     run_dir = make_run_dir(output_root, cfg.run_name, cfg.hash())
     cfg.dump(run_dir / "config.yaml")
     cases_hash = write_jsonl(run_dir / "cases.jsonl", (asdict(c) for c in cases))
-    started = datetime.now(UTC).isoformat()
 
     pairs = [
         (case, ChatRequest(case.messages, cfg.temperature, cfg.max_tokens, cfg.seed, s))
@@ -70,8 +68,6 @@ def run_experiment(
         "n_cases": len(cases),
         "n_rows": len(rows),
         "models": {a: asdict(models[a]) for a in cfg.models},
-        "started": started,
-        "finished": datetime.now(UTC).isoformat(),
     }
     (run_dir / "meta.json").write_text(json.dumps(meta, indent=2))
     return run_dir
