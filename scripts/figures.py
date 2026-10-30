@@ -21,7 +21,7 @@ SHORT = {
 
 
 def style(size: float = 9) -> None:
-    for f in ("SourceSans3-Regular.ttf", "SourceSans3-Semibold.ttf", "SourceSans3-It.ttf"):
+    for f in ("SourceSans3-Regular.ttf", "SourceSans3-Semibold.ttf"):
         font_manager.fontManager.addfont(str(FONTS / f))
     plt.rcParams.update(
         {
