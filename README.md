@@ -1,11 +1,11 @@
 # Two clinical failure modes of MedGemma-27B
 
-Code and data for my Alterra Labs take-home. I tested Google's MedGemma-27B-text on two
-tasks a clinician does from the chart, and compared it with its own base model
-(Gemma-3-27B, served with the same vLLM version and settings) and with Llama-3.3-70B.
-Every test shows the same note or exam question twice, with one sentence changed, so each
-model is compared with itself. Both failures were pre-registered (`prereg/`) and then
-confirmed on notes and questions I had not looked at.
+Code and data for a study of where MedGemma fails on clinical tasks. I tested Google's
+MedGemma-27B-text on two tasks a clinician does from the chart, and compared it with its
+own base model (Gemma-3-27B, served with the same vLLM version and settings) and with
+Llama-3.3-70B. Every test shows the same note or exam question twice, with one sentence
+changed, so each model is compared with itself. Both failures were pre-registered
+(`prereg/`) and then confirmed on notes and questions I had not looked at.
 
 **Failure A: MedGemma overrides the documented medication plan.** When a discharge summary
 says a home drug "was continued at the home dose throughout the admission" but gives no
