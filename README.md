@@ -7,11 +7,13 @@ Llama-3.3-70B. Every test shows the same note or exam question twice, with one s
 changed, so each model is compared with itself. Both failures were pre-registered
 (`prereg/`) and then confirmed on notes and questions I had not looked at.
 
-**Failure A: MedGemma overrides the documented medication plan.** When a discharge summary
+**Failure A: MedGemma holds drugs the note says were continued.** When a discharge summary
 says a home drug "was continued at the home dose throughout the admission" but gives no
-discharge instruction, MedGemma drops it from the discharge list in 15.0% of notes (29.0%
+discharge instruction, MedGemma takes it off the discharge list in 15.0% of notes (29.0%
 when a lab abnormality that has already resolved is also mentioned), against 4.3% and 8.7%
-for Gemma-3 on the same 300 notes.
+for Gemma-3 on the same 300 notes. Almost every drop is an explicit "stop or hold" with a
+reason. The test expects the documented plan to be kept and any concern to be flagged; no
+pharmacist has yet judged whether each hold is clinically wrong.
 
 **Failure B: MedGemma defers to an asserted wrong diagnosis.** One line saying the referring
 physician's working diagnosis is a wrong option flips 7.7% of the diagnoses MedGemma
@@ -42,17 +44,38 @@ Markdown table per analysis to `results/tables/` and redraws the two figures in
 
 | Table | What it shows |
 |---|---|
-| `a_confirm.md` | Failure A, pre-registered confirmation: drop rate per condition, both models |
-| `a_audit.md`, `a_by_drug.md` | Failure A without drugs a pharmacist might reasonably hold, and without narratives that end in a death |
+| `a_confirm.md` | Failure A, pre-registered confirmation: drop rate per note version, both models |
+| `a_drop_kinds.md` | Whether a dropped drug was put on hold, left off every list, or flagged |
+| `a_audit.md`, `a_by_drug.md` | Failure A without drugs a pharmacist might reasonably hold, and without narratives that mention a death |
 | `a_distractors.md` | MedGemma does not drop the unrelated home drugs more often |
 | `a_noflags.md`, `a_mitigation.md` | Failure A with a list-only output, and with an instruction to copy the plan |
 | `a_age45.md`, `a_age85.md` | The same notes with only the patient's age changed |
 | `b_confirm.md` | Failure B, pre-registered confirmation, three models |
+| `b_shared.md` | MedGemma and Gemma-3 on the questions both answer correctly |
 | `b_posthoc.md`, `b_posthoc_2x2.md` | Who states the wrong diagnosis and how certain the wording is |
 | `b_cot_vs_direct.md`, `b_cot_mentions.md` | Asking for step-by-step reasoning |
 | `p1_leakage.md` | The stopped-drug probe, which did not turn up a failure |
 | `prevalence.md` | How often each trigger appears in MTSamples |
 | `run_index.md` | Every run with its model, server and model revision |
+
+## How the code works
+
+A run goes through five steps.
+
+1. A probe in `src/clinfail/probes/` builds the cases. Each note or question becomes a few
+   versions that differ by one sentence and share a `pair_id`. `med_override.py` builds
+   Failure A and `anchoring.py` builds Failure B.
+2. `runner.py` reads a YAML config, builds the cases and sends each prompt through
+   `models/llm.py`, an OpenAI-compatible client. Every reply is cached under a hash of the
+   model, prompt and settings, so rerunning a config replays the same replies.
+3. The probe's `score` method parses each reply with fixed rules (JSON for A, the answer
+   letter for B) and sets `failed`. An unparseable reply is never scored as correct: in B
+   it counts as a flip, and in A the note leaves the comparison (every A reply parsed).
+4. `scripts/analyze.py` loads the run folders and compares versions of the same item with
+   the functions in `eval/metrics.py`: Wilson intervals, the exact McNemar test and Holm's
+   correction.
+5. `scripts/reproduce.py` runs every analysis on the saved replies in `results/` and
+   writes the tables and figures.
 
 ## Tests
 
@@ -64,7 +87,8 @@ pytest
 figures exactly. `tests/test_bundled_runs.py` rebuilds the prompts of every bundled run from
 the pinned datasets and checks them against the sha256 recorded at run time, then re-scores
 every stored reply and checks that each verdict is unchanged. It needs the datasets, so run
-`python scripts/get_data.py` first (it is skipped otherwise).
+`python scripts/get_data.py` first (it is skipped otherwise). The other tests check the case
+builders, scorers, reply cache and statistics on small hand-made inputs.
 
 ## Fresh runs
 
@@ -89,11 +113,11 @@ With your own vLLM server, set `VLLM_URL_MEDGEMMA_27B` (or `VLLM_URL_GEMMA3_27B`
 `VLLM_API_KEY`, then use `python -m clinfail.cli <config> --use medgemma-27b`. Add
 `--n-cases 10` for a quick check.
 
-Each run writes `outputs/runs/<time>_<run name>_<config hash>/` with the config, every
-prompt (`cases.jsonl`), every reply and its scores (`results.jsonl`), a summary and
-`meta.json` (git commit, hashes, model endpoints). Replies are cached under
-`outputs/cache/`, so rerunning a config replays them. `python scripts/bundle.py` copies
-finished runs into `results/`.
+Each run writes `outputs/runs/<run name>_<config hash>/` with the config, every prompt
+(`cases.jsonl`), every reply and its scores (`results.jsonl`), a summary and `meta.json`
+(git commit, hashes, model endpoints). `python scripts/bundle.py` copies finished runs into
+`results/`. A fresh run asks the model again, so its replies can differ slightly from the
+saved ones; the saved replies are what every table is built from.
 
 ## Experiments
 

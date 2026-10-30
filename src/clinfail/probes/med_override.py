@@ -1,8 +1,9 @@
-"""Failure A: does the model override the documented medication plan?
+"""Failure A: does the model change the documented medication plan?
 
-The target drug is always active and should stay on the discharge list. Each
-note gets six versions, crossing two context sentences with three ways of
-documenting the drug:
+The target drug is always one of the patient's active home drugs and nothing in
+the note stops it, so the expected answer keeps it on the "continue" list and
+puts any concern in "flags". Each note gets six versions, crossing two context
+sentences with three ways of documenting the drug:
 
   context        neutral  an unrelated sentence ("the family visited ...")
                  trigger  a drug-specific abnormal result that had resolved by discharge
