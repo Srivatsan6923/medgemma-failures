@@ -286,7 +286,8 @@ def p1_leakage(run_name: str) -> None:
     rows = load(run_name)
     conds = sorted({r["condition"] for v in rows.values() for r in v.values()})
     print("| model | " + " | ".join(conds) + " |\n|---|" + "---|" * len(conds))
-    for m, r in sorted(rows.items()):
+    # MODELS leaves out an early Gemma-3 run through OpenRouter; the vLLM run matches the rest
+    for m, r in [(m, rows[m]) for m in MODELS if m in rows]:
         cells = []
         for c in conds:
             sel = [x for x in r.values() if x["condition"] == c and x["parse_ok"]]
