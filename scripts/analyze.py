@@ -216,6 +216,31 @@ def override_by_drug(run_name: str) -> None:
             )
 
 
+def drug_fate(row: dict) -> str:
+    if row["target_in_continue"]:
+        where = "kept"
+    elif row["target_in_stop"]:
+        where = "held"
+    else:
+        where = "left off"
+    return where + (" + flag" if row["target_flagged"] else "")
+
+
+def drop_kinds(run_name: str) -> None:
+    """What each model does with the target drug: keeps it, moves it to stop_or_hold, or
+    leaves it off every list, and whether a flag names it."""
+    rows = load(run_name)
+    kinds = ["kept", "kept + flag", "held", "held + flag", "left off", "left off + flag"]
+    print("| condition | model | notes | " + " | ".join(kinds) + " |")
+    print("|---|---|---|" + "---|" * len(kinds))
+    for c in sorted({r["condition"] for r in rows[MG].values()}):
+        for m in (MG, G):
+            sel = [r for r in rows[m].values() if r["condition"] == c and r["parse_ok"]]
+            n = Counter(drug_fate(r) for r in sel)
+            print(f"| {c} | {m} | {len(sel)} | " + " | ".join(str(n[k]) for k in kinds) + " |")
+    print("held = in stop_or_hold; left off = in no list; flag = a flag names the drug")
+
+
 def distractors(run_name: str) -> None:
     """Does MedGemma also drop the five unrelated home drugs? If the failure were
     general list trimming, it would."""
@@ -310,7 +335,7 @@ def anchoring(run_name: str, anchors=("wrong_anchor",)) -> None:
     pvals = []
     print(
         "| model | baseline acc | kept | condition | flips | onto anchor | vs neutral "
-        "| OR [95% CI] | p |\n|---|---|---|---|---|---|---|---|---|"
+        "| OR [95% CI] | p | unparseable |\n|---|---|---|---|---|---|---|---|---|---|"
     )
     for m in [m for m in MODELS if m in rows]:
         r = rows[m]
@@ -331,12 +356,33 @@ def anchoring(run_name: str, anchors=("wrong_anchor",)) -> None:
             p = mcnemar_exact(b, cc)
             if c in anchors:
                 pvals.append((m, c, p))
+            # unparseable replies are already counted in flips; this column says how many
+            unparsed = sum(not r[f"{i}-{c}"]["parse_ok"] for i in keep)
             print(
                 f"| {m} | {acc:.3f} | {len(keep)}/{len(items)} | {c} | {rate(sum(flips), len(keep))} "
-                f"| {onto} | {b} vs {cc} | {odds_ratio(b, cc)} | {p:.2g} |"
+                f"| {onto} | {b} vs {cc} | {odds_ratio(b, cc)} | {p:.2g} | {unparsed} |"
             )
     for (m, c, _), p in zip(pvals, holm([p for *_, p in pvals]), strict=True):
         print(f"Holm-adjusted p ({m}, {c}): {p:.2g}")
+
+
+def shared_items(run_name: str) -> None:
+    """MedGemma vs Gemma-3 on the questions both answer correctly with no line. Each
+    model's own analysis keeps a different set of questions; this one compares like
+    with like."""
+    rows = load(run_name)
+    mg, g = rows[MG], rows[G]
+    both = sorted(set(baseline_correct(mg)[1]) & set(baseline_correct(g)[1]))
+    print(f"questions both models answer correctly with no line: {len(both)}")
+    print("| condition | MedGemma | Gemma-3 | MG only | G only | p |\n|---|---|---|---|---|---|")
+    for c in sorted({x["condition"] for x in mg.values()} - {"baseline"}):
+        fm = [mg[f"{i}-{c}"]["failed"] for i in both]
+        fg = [g[f"{i}-{c}"]["failed"] for i in both]
+        b, cc = discordant(fm, fg)
+        print(
+            f"| {c} | {rate(sum(fm), len(both))} | {rate(sum(fg), len(both))} | {b} | {cc} "
+            f"| {mcnemar_exact(b, cc):.2g} |"
+        )
 
 
 def authority2x2(run_name: str) -> None:
@@ -502,11 +548,13 @@ if __name__ == "__main__":
         "override": override,
         "override_audit": override_audit,
         "override_by_drug": override_by_drug,
+        "drop_kinds": drop_kinds,
         "distractors": distractors,
         "read_and_override": read_and_override,
         "reasoning_scan": reasoning_scan,
         "p1_leakage": p1_leakage,
         "anchoring": anchoring,
+        "shared_items": shared_items,
         "authority2x2": authority2x2,
         "cot_vs_direct": cot_vs_direct,
         "cot_mentions": cot_mentions,

@@ -36,6 +36,12 @@ STEPS = [
         "a_confirm_override",
     ),
     (
+        "a_drop_kinds",
+        "Failure A, what each model does with the target drug (exploratory)",
+        analyze.drop_kinds,
+        "a_confirm_override",
+    ),
+    (
         "a_distractors",
         "Failure A, unrelated home drugs dropped",
         analyze.distractors,
@@ -84,6 +90,12 @@ STEPS = [
         "b_confirm",
         "Failure B, confirmation (pre-registered)",
         analyze.anchoring,
+        "b_confirm_anchoring",
+    ),
+    (
+        "b_shared",
+        "Failure B, questions both MedGemma and Gemma-3 answer correctly with no line (post-hoc)",
+        analyze.shared_items,
         "b_confirm_anchoring",
     ),
     (
