@@ -18,7 +18,6 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from pathlib import Path
 
 from dotenv import dotenv_values
 
@@ -156,16 +155,9 @@ def main() -> None:
     args = parser.parse_args()
     key = secrets.token_urlsafe(24)
     pod = create_pod(args.alias, key, args.gpu or GPUS)
-    record = {
-        **pod,
-        "alias": args.alias,
-        "image": IMAGE,
-        "configs": args.configs,
-    }
     try:
         print(f"pod {pod['id']} on {pod['gpu']} at ${pod['costPerHr']}/h")
         base = wait_ready(pod["id"], key)
-        record["ready"] = True
         print(f"ready: {base}")
         env = {**os.environ, MODELS[args.alias][2]: f"{base}/v1", "VLLM_API_KEY": key}
         for cfg in args.configs:
@@ -176,10 +168,7 @@ def main() -> None:
             )
     finally:
         terminate(pod["id"])
-        out = Path(ENV.get("OUTPUT_ROOT") or "outputs") / "pods" / f"{pod['id']}.json"
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(record, indent=2))
-        print(f"pod {pod['id']} terminated; record at {out}")
+        print(f"pod {pod['id']} terminated")
 
 
 if __name__ == "__main__":

@@ -281,30 +281,6 @@ def read_and_override(run_name: str) -> None:
         print(f"| {c} | {len(flags)} | {sum(bool(f) for f in flags)} | {cont} | {res} |")
 
 
-A_RUNS = [
-    "p1_med_status_explore_medgemma",
-    "p1o_override_explore",
-    "p1o_age45",
-    "p1o_age85",
-    "a_confirm_override",
-    "a_mech_noflags",
-    "a_mech_mitigation",
-    "a_mech_paraphrase_1",
-    "a_mech_paraphrase_2",
-]
-
-
-def reasoning_scan(_: str = "") -> None:
-    """MedGemma's reasoning block appears on exam questions; check it never appears here."""
-    total = blocks = 0
-    for run in A_RUNS:
-        mg = load(run).get(MG, {})
-        n = sum("<unused94>" in r["output"] for r in mg.values())
-        total, blocks = total + len(mg), blocks + n
-        print(f"{run}: {n}/{len(mg)} MedGemma replies contain <unused94>")
-    print(f"all Failure A runs: {blocks}/{total}")
-
-
 def p1_leakage(run_name: str) -> None:
     """Stopped-drug probe: failures per condition."""
     rows = load(run_name)
@@ -470,26 +446,6 @@ def reasoning_mentions(run_name: str) -> None:
         print(f"{label}: {len(rows)} items, note in reasoning {thought}, in final answer {final}")
 
 
-def image_items(run_name: str) -> None:
-    """No-source line split by whether the question refers to an image. Right after
-    "A photograph is shown.", "The diagnosis is X." can read as part of the exam question."""
-    shows_image = set(json.loads((RUNS / "image_items.json").read_text(encoding="utf-8")))
-    rows = load(run_name)
-    for m in [m for m in MODELS if m in rows]:
-        r = rows[m]
-        _, keep = baseline_correct(r)
-        for label, ids in [
-            ("question refers to an image", [i for i in keep if i in shows_image]),
-            ("other questions", [i for i in keep if i not in shows_image]),
-        ]:
-            bare = sum(r[f"{i}-wrong_bare"]["failed"] for i in ids)
-            neutral = sum(r[f"{i}-neutral"]["failed"] for i in ids)
-            print(
-                f"{m}, {label}: {len(ids)} items, no-source line flips {bare}, "
-                f"neutral line flips {neutral}"
-            )
-
-
 # ---------------------------------------------------------------- data and provenance
 
 
@@ -542,7 +498,6 @@ if __name__ == "__main__":
         "drop_kinds": drop_kinds,
         "distractors": distractors,
         "read_and_override": read_and_override,
-        "reasoning_scan": reasoning_scan,
         "p1_leakage": p1_leakage,
         "anchoring": anchoring,
         "shared_items": shared_items,
@@ -550,7 +505,6 @@ if __name__ == "__main__":
         "cot_vs_direct": cot_vs_direct,
         "cot_mentions": cot_mentions,
         "reasoning_mentions": reasoning_mentions,
-        "image_items": image_items,
         "prevalence": prevalence,
         "data_counts": data_counts,
         "run_index": run_index,

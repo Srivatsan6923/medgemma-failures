@@ -10,7 +10,7 @@ import re
 import shutil
 from pathlib import Path
 
-from analyze import RUNS, load, run_dirs
+from analyze import load, run_dirs
 from clinfail.probes.notes import load_courses
 
 RUN_NAMES = [
@@ -34,20 +34,10 @@ RUN_NAMES = [
 ]
 DEATH = re.compile(r"\b(died|expired|passed away|death|deceased|succumbed)\b", re.I)
 DIAGNOSIS_Q = re.compile(r"most likely diagnosis\?\s*$", re.I)
-# exam stems like "A photograph of the lesion is shown." refer to an image the model can't see
-SHOWS_IMAGE = re.compile(r"\b(photograph|photomicrograph|image|is shown|are shown)\b", re.I)
 OUT = Path("results")
 
 
 def copy_runs() -> None:
-    # one record per RunPod server: model revision, image and GPU
-    (OUT / "pods").mkdir(parents=True, exist_ok=True)
-    for f in (RUNS.parent / "pods").glob("*.json"):
-        record = json.loads(f.read_text(encoding="utf-8"))
-        if record.get("ready"):
-            (OUT / "pods" / f.name).write_text(
-                json.dumps(record, indent=2) + "\n", encoding="utf-8"
-            )
     for name in RUN_NAMES:
         for d in run_dirs(name).values():
             dest = OUT / d.name
@@ -87,20 +77,7 @@ def death_narratives() -> None:
     (OUT / "narratives_death.json").write_text(json.dumps(died) + "\n", encoding="utf-8")
 
 
-def image_items() -> None:
-    """Ids of MedQA diagnosis items whose question refers to an image."""
-    lines = Path("data/processed/medqa_train_v1.jsonl").read_text(encoding="utf-8").splitlines()
-    items = [json.loads(line) for line in lines]
-    ids = sorted(
-        x["item_id"]
-        for x in items
-        if DIAGNOSIS_Q.search(x["question"]) and SHOWS_IMAGE.search(x["question"])
-    )
-    (OUT / "image_items.json").write_text(json.dumps(ids) + "\n", encoding="utf-8")
-
-
 if __name__ == "__main__":
     copy_runs()
     data_counts()
     death_narratives()
-    image_items()

@@ -1,4 +1,4 @@
-"""The two figures of the write-up, drawn from the run outputs."""
+"""The write-up figure, drawn from the run outputs."""
 
 from pathlib import Path
 
@@ -13,17 +13,11 @@ FONTS = Path("assets/fonts")
 INK, MUTED, RULE = "#111111", "#444444", "#BBBBBB"
 COLORS = {"medgemma-27b": "#1F3A5F", "gemma3-27b-vllm": "#D9822B", "llama33-70b": "#3A8F5C"}
 MARKERS = {"medgemma-27b": "o", "gemma3-27b-vllm": "s", "llama33-70b": "^"}
-NAMES = {
-    "medgemma-27b": "MedGemma-27B",
-    "gemma3-27b-vllm": "Gemma-3-27B (base)",
-    "llama33-70b": "Llama-3.3-70B",
-}
 SHORT = {
     "medgemma-27b": "MedGemma",
     "gemma3-27b-vllm": "Gemma-3 (base)",
     "llama33-70b": "Llama-3.3",
 }
-WIDTH = 7.1  # inches, the text width of the write-up
 
 
 def style(size: float = 9) -> None:
@@ -87,69 +81,9 @@ def tag(ax, est: tuple[float, float, float], y: float, left: bool = False) -> No
     ax.text(x, y, f"{est[0]:.0f}%", va="center", ha=ha, fontsize=plt.rcParams["font.size"] - 0.5)
 
 
-def letter(ax, s: str) -> None:
-    ax.text(-0.02, 1.04, s, transform=ax.transAxes, fontweight="semibold", ha="right", va="bottom")
-
-
 def save(fig, name: str) -> None:
     fig.savefig(OUT / f"{name}.svg", metadata={"Date": None})
     fig.savefig(OUT / f"{name}.png", dpi=300)
-
-
-def figure_a() -> None:
-    """(a) drop rate per condition on the confirmation notes; (b) the same 120 development
-    notes ("was continued" + resolved lab) under three output setups."""
-    style()
-    confirm = load("a_confirm_override")
-    setups = [
-        ("p1o_override_explore", "JSON with a flags field"),
-        ("a_mech_noflags", "list-only JSON, no flags"),
-        ("a_mech_mitigation", '+ "reproduce the documented plan"'),
-    ]
-    fig, (ax1, ax2) = plt.subplots(
-        1, 2, figsize=(WIDTH, 2.25), gridspec_kw={"width_ratios": [1.3, 1]}
-    )
-    conds = [
-        ("trigger_continue_at_discharge", '"…continued at discharge", lab finding'),
-        ("neutral_continue_at_discharge", '"…continued at discharge", neutral'),
-        ("trigger_silent", "not mentioned, lab finding"),
-        ("neutral_silent", "not mentioned, neutral"),
-        ("trigger_continued", '"was continued", lab finding'),
-        ("neutral_continued", '"was continued", neutral'),
-    ]
-    for y, (c, _) in enumerate(conds):
-        for off, m in [(0.15, "medgemma-27b"), (-0.15, "gemma3-27b-vllm")]:
-            est = rate([r for r in confirm[m].values() if r["condition"] == c and r["parse_ok"]])
-            dot(ax1, y + off, est, m, NAMES[m] if y == 0 else None)
-            if c == "trigger_continued" or (c == "neutral_continued" and m == "medgemma-27b"):
-                tag(ax1, est, y + off)
-    ax1.set_yticks(range(len(conds)), [label for _, label in conds])
-    ax1.set_xlim(0, 40)
-    ax1.set_ylim(-0.6, len(conds) - 0.4)
-    ax1.set_xlabel("Target drug missing from the discharge list (%)")
-    ax1.legend(frameon=False, loc="lower right", handletextpad=0.3, borderaxespad=0.2)
-    letter(ax1, "a")
-
-    for y, (run, _) in enumerate(setups[::-1]):
-        rows = load(run)
-        for off, m in [(0.15, "medgemma-27b"), (-0.15, "gemma3-27b-vllm")]:
-            sel = [
-                r
-                for r in rows[m].values()
-                if r["condition"] == "trigger_continued" and r["parse_ok"]
-            ]
-            est = rate(sel)
-            dot(ax2, y + off, est, m)
-            if m == "medgemma-27b":
-                tag(ax2, est, y + off)
-    ax2.set_yticks(range(len(setups)), [label for _, label in setups[::-1]])
-    ax2.set_xlim(0, 40)
-    ax2.set_ylim(-0.6, len(setups) - 0.4)
-    ax2.set_xlabel("Target drug missing (%)")
-    letter(ax2, "b")
-    fig.tight_layout(w_pad=1.5)
-    save(fig, "fig_a_override")
-    plt.close(fig)
 
 
 def figure_b() -> None:
@@ -202,6 +136,5 @@ def figure_b() -> None:
 
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
-    figure_a()
     figure_b()
     print(f"wrote figures to {OUT}")

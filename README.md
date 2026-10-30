@@ -33,7 +33,7 @@ python scripts/reproduce.py
 ```
 
 This reads the saved model replies in `results/`, writes one Markdown table per analysis
-to `results/tables/` and redraws the figures in `figures/`. The two main tables are
+to `results/tables/` and redraws the figure in `figures/`. The two main tables are
 `a_confirm.md` and `b_confirm.md`, the pre-registered confirmation runs; the rest are the
 mechanism tests and checks described in the write-up.
 
@@ -54,7 +54,7 @@ A run goes through five steps.
    the functions in `eval/metrics.py`: Wilson intervals, the exact McNemar test and Holm's
    correction.
 5. `scripts/reproduce.py` runs every analysis on the saved replies in `results/` and
-   writes the tables and figures.
+   writes the tables and the figure.
 
 ## Tests
 
@@ -71,9 +71,8 @@ the case builders, scorers, cache and statistics.
 
 Copy `.env.example` to `.env` and fill in the keys you need.
 
-MedGemma is not on OpenRouter, so MedGemma and Gemma-3 run on a vLLM server
-(bf16, greedy decoding). This starts one on
-RunPod, runs the configs and always shuts the server down:
+MedGemma is not on OpenRouter, so MedGemma and Gemma-3 run on a vLLM server. This starts
+one on RunPod, runs the configs and shuts the server down:
 
 ```bash
 python deploy/runpod.py medgemma-27b configs/experiments/a_confirm_override.yaml
@@ -86,15 +85,9 @@ Llama-3.3-70B runs through OpenRouter:
 python -m clinfail.cli configs/experiments/b_confirm_anchoring.yaml --use llama33-70b
 ```
 
-With your own vLLM server, set `VLLM_URL_MEDGEMMA_27B` (or `VLLM_URL_GEMMA3_27B`) and
-`VLLM_API_KEY`, then use `python -m clinfail.cli <config> --use medgemma-27b`. Add
-`--n-cases 10` for a quick check.
-
-Each run writes `outputs/runs/<run name>_<config hash>/` with the config, every prompt
-(`cases.jsonl`), every reply and its scores (`results.jsonl`), a summary and `meta.json`
-(hashes and model endpoints). `python scripts/bundle.py` copies finished runs into
-`results/`. A fresh run asks the model again, so its replies can differ slightly from the
-saved ones; the saved replies are what every table is built from.
+Each run writes its config, prompts, replies and scores to `outputs/runs/`, and
+`python scripts/bundle.py` copies finished runs into `results/`. A fresh run asks the model
+again, so its replies can differ slightly from the saved ones.
 
 ## Experiments
 
@@ -132,7 +125,7 @@ src/clinfail/
 scripts/            reproduce.py, analyze.py, figures.py, bundle.py, prevalence.py, get_data.py
 deploy/runpod.py    vLLM server on RunPod
 results/            one directory per run (config, meta, every reply), tables, derived files
-figures/            the two figures
+figures/            the write-up figure
 tests/
 ```
 

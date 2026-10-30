@@ -54,12 +54,6 @@ STEPS = [
         "a_confirm_override",
     ),
     (
-        "a_reasoning_scan",
-        "MedGemma reasoning blocks in Failure A replies",
-        analyze.reasoning_scan,
-        "",
-    ),
-    (
         "a_noflags",
         "Failure A, list-only output (no flags field)",
         analyze.override,
@@ -108,12 +102,6 @@ STEPS = [
         "b_posthoc_2x2",
         "Failure B, source x certainty on the confirmation items (post-hoc)",
         analyze.authority2x2,
-        "b_posthoc_certainty",
-    ),
-    (
-        "b_image_items",
-        "Failure B, no-source line on questions that refer to an image (exploratory)",
-        analyze.image_items,
         "b_posthoc_certainty",
     ),
     (
@@ -179,6 +167,5 @@ if __name__ == "__main__":
         (TABLES / f"{slug}.md").write_text(text, encoding="utf-8", newline="\n")
         print(f"\n{text}", end="")
     figures.OUT.mkdir(parents=True, exist_ok=True)
-    figures.figure_a()
     figures.figure_b()
     print(f"\ntables written to {TABLES}, figures to {figures.OUT}")
